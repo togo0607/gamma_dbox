@@ -53,7 +53,7 @@ $$T_{\textrm{eff}} = \frac{1}{n}\int_{-\infty}^{\infty}m(v_{\parallel} - u_{\tex
 $$\gamma = \frac{m}{eT_{\textrm{eff}}}\left(u_{\textrm{eff}}^2 - \frac{n}{\int_0^{\infty}\textrm{d}v_{\parallel}\frac{f(v_{\parallel})}{v_{\parallel}^2}} \right) 
 = \frac{m}{eT_{\textrm{eff}}}\left( u_{\textrm{eff}}^2 - \frac{v_{\textrm{c}}\left( v_{\textrm{c}} + \Delta_1 \right) \left(v_{\textrm{c}}+\Delta_2 \right) }{v_{\textrm{c}} + \left( 1 - C_{\textrm{h}} \right) \Delta_2 + C_{\textrm{h}}\Delta_1} \right)$$
 
-**Draw $f(v_{\parallel})$ for some of $C_{\textrm{h}}$**
+**Get $f(v_{\parallel})$ for some of $C_{\textrm{h}}$**
 
 $C_{\textrm{h}} = 0, 0.2, 0.4, 0.6, 0.8, 1$の場合の分布関数$f(v_{\parallel})$ (1で規格化)を取得
 
