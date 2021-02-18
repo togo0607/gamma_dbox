@@ -47,8 +47,11 @@ $$ \int_0^{\infty}\textrm{d}v_{\parallel}\frac{f(v_{\parallel})}{v_{\parallel}^2
 - 実効流速
 $$u_{\textrm{eff}} = \frac{1}{n}\int_{-\infty}^{\infty}v_{\parallel}f(v_{\parallel})\textrm{d}v_{\parallel} = v_{\textrm{c}} + (1 - C_{\textrm{h}})\frac{\Delta_1}{2} + C_{\textrm{h}}\frac{\Delta_2}{2}$$
 - 実効温度
-$$T_{\textrm{eff}} = \frac{1}{n}\int_{-\infty}^{\infty}m(v_{\parallel} - u_{\textrm{eff}})^2f(v_{\parallel})\textrm{d}v_{\parallel} = \frac{m}{e}\left[ \frac{1}{3}\left( \left( 1 - C_{\textrm{h}} \right)\Delta_1^2 + C_{\textrm{h}}\Delta_2^2 \right) - \left( u_{\textrm{eff}} - v_{\textrm{c}} \right)^2 \right]$$
-- 伝導熱流束(開発中)
+$$T_{\textrm{eff}} = \frac{1}{en}\int_{-\infty}^{\infty}m(v_{\parallel} - u_{\textrm{eff}})^2f(v_{\parallel})\textrm{d}v_{\parallel} = \frac{m}{e}\left[ \frac{1}{3}\left( \left( 1 - C_{\textrm{h}} \right)\Delta_1^2 + C_{\textrm{h}}\Delta_2^2 \right) - \left( u_{\textrm{eff}} - v_{\textrm{c}} \right)^2 \right]$$
+- 対流熱流束(密度で規格化)
+$$\frac{q_{\parallel}^{\textrm{conv}}}{n} = \left( \frac{1}{2}mu_{\textrm{eff}}^2 + \frac{3}{2}eT_{\textrm{eff}} \right)u_{\textrm{eff}}$$
+- 伝導熱流束(密度で規格化)
+$$\frac{q_{\parallel}^{\textrm{cond}}}{n} = \frac{1}{n}\int_{-\infty}^{\infty}\frac{1}{2}m\left( v_{\parallel} - u_{\parallel} \right)^3f(v_{\parallel})\textrm{d}v_{\parallel}$$
 - 比熱比
 $$\gamma = \frac{m}{eT_{\textrm{eff}}}\left(u_{\textrm{eff}}^2 - \frac{n}{\int_0^{\infty}\textrm{d}v_{\parallel}\frac{f(v_{\parallel})}{v_{\parallel}^2}} \right) 
 = \frac{m}{eT_{\textrm{eff}}}\left( u_{\textrm{eff}}^2 - \frac{v_{\textrm{c}}\left( v_{\textrm{c}} + \Delta_1 \right) \left(v_{\textrm{c}}+\Delta_2 \right) }{v_{\textrm{c}} + \left( 1 - C_{\textrm{h}} \right) \Delta_2 + C_{\textrm{h}}\Delta_1} \right)$$
@@ -64,3 +67,4 @@ $C_{\textrm{h}} = 0, 0.2, 0.4, 0.6, 0.8, 1$の場合の分布関数$f(v_{\parall
 - $\gamma (C_{\textrm{h}})$ ("gamma.svg", "gamma.pdf")
 - $u_{\textrm{eff}} (C_{\textrm{h}})$ ("flow.svg", "flow.pdf")
 - $T_{\textrm{eff}} (C_{\textrm{h}})$ ("temp.svg", "temp.svg")
+- $q_{\parallel}^{\textrm{cond}}/q_{\parallel}^{\textrm{conv}} (C_{\textrm{h}})$ ("heatflux.svg", "heatflux.svg")

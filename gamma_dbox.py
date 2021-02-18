@@ -28,9 +28,14 @@ c_h    = np.linspace(0.0, 1.0, 1000)   #The density ratio of higher-T component
 u_eff  = v_c + (1.0-c_h)*(Delta_1/2.0) + c_h*(Delta_2/2.0)   #The effective flow velocity [m/s]
 T_eff  = ((1.0-c_h)*Delta_1**2.0+c_h*Delta_2**2.0)/3.0 - (u_eff - v_c)**2.0   #tentative
 T_eff  = T_eff*m/e   #The effective temperature [eV]
-#q_cond =
+q_conv = (0.5*m*u_eff**2.0 + 1.5*e*T_eff)*u_eff   #convective heat flux / n [Wm]
+q_cond = ((1.0-c_h)/Delta_1 + c_h/Delta_2)*((v_c + Delta_1 - u_eff)**4.0 - (v_c - u_eff)**4.0)  #tentative
+q_cond = q_cond + c_h/Delta_2*((v_c + Delta_2 - u_eff)**4.0 - (v_c + Delta_1 - u_eff)**4.0)  #tentative
+q_cond = q_cond*(m/8.0)   #conductive heat flux / n [Wm]
 gamma  = u_eff**2.0 - v_c*(v_c+Delta_1)*(v_c+Delta_2)/(v_c+(1.0-c_h)*Delta_2+c_h*Delta_1)   #tentative
 gamma  = gamma/(T_eff*e/m)   #specific heat ratio
+
+print("at c_h =", c_h[gamma.argmin()], ", gamma =", min(gamma))
 
 ###Get f(v_para) for some of c_h###
 c_h_samp = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -108,5 +113,20 @@ ax.set(xlim=[0,1],
        title='')
 plt.savefig("temp.svg",bbox_inches="tight")
 plt.savefig("temp.pdf",bbox_inches="tight")
+plt.show()
+
+#heat fluxes
+fig, ax = plt.subplots()
+ax.plot(c_h,q_cond/q_conv,'-')
+ax.yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
+ax.ticklabel_format(style="sci",  axis="y",scilimits=(0,0))
+ax.tick_params(which='both',axis='both', direction='in')
+ax.set(xlim=[0,1],
+       ylim=[0,(q_cond/q_conv).max()*1.1],
+       xlabel='n$_{\\rm{hot}}$/n',
+       ylabel='q$_{\\parallel}^{\\rm{cond}}$/q$_{\\parallel}^{\\rm{conv}}$ ',
+       title='')
+plt.savefig("heatflux.svg",bbox_inches="tight")
+plt.savefig("heatflux.pdf",bbox_inches="tight")
 plt.show()
 
