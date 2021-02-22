@@ -25,7 +25,8 @@ $$ \int_0^{\infty}\textrm{d}v_{\parallel}\frac{f(v_{\parallel})}{v_{\parallel}^2
 **Specify the characteristics of $f(v_{\parallel}$)**
 
 インプットパラメータとして下記を与える。
-- 与える分布関数が0でない値を持つ下限($v_{\\textrm{c}}$ [m/s])
+- 伝導熱流束の向き($q_{\textrm{switch}}$): 0は$q_{\parallel}^{\textrm{cond}} > 0$、1は$q_{\parallel}^{\textrm{cond}} < 0$
+- 二つの矩形分布の共通速度($v_{\\textrm{c}}$ [m/s])
 - 低温成分の温度($T_1$ [eV])
 - 高温成分の温度($T_2$ [eV])
 
@@ -40,6 +41,8 @@ $$ \int_0^{\infty}\textrm{d}v_{\parallel}\frac{f(v_{\parallel})}{v_{\parallel}^2
 分布関数を特徴付ける量として以下を計算する。
 - 低温成分の幅($\Delta _1 = \sqrt{\frac{12T_1e}{m}}$ [m/s])
 - 高温成分の幅($\Delta _2 = \sqrt{\frac{12T_2e}{m}}$ [m/s])
+
+$q_{\textrm{switch}} =1$のときは$\Delta$を負の値で与える。またそのとき分布関数の下端$v_{\textrm{c}} + \Delta_2$が0以下であればプログラムを止める。
 
 **Compute the moment quantities of $f(v_{\parallel})$**
 
@@ -56,6 +59,8 @@ $$\frac{q_{\parallel}^{\textrm{cond}}}{n} = \frac{1}{n}\int_{-\infty}^{\infty}\f
 $$\gamma = \frac{m}{eT_{\textrm{eff}}}\left(u_{\textrm{eff}}^2 - \frac{n}{\int_0^{\infty}\textrm{d}v_{\parallel}\frac{f(v_{\parallel})}{v_{\parallel}^2}} \right) 
 = \frac{m}{eT_{\textrm{eff}}}\left( u_{\textrm{eff}}^2 - \frac{v_{\textrm{c}}\left( v_{\textrm{c}} + \Delta_1 \right) \left(v_{\textrm{c}}+\Delta_2 \right) }{v_{\textrm{c}} + \left( 1 - C_{\textrm{h}} \right) \Delta_2 + C_{\textrm{h}}\Delta_1} \right)$$
 
+$q_{\textrm{switch}} =0$のときは$\gamma$の極小値とそれを与える$C_{\textrm{h}}$を、$q_{\textrm{switch}} =1$のときは$\gamma$の極大値とそれを与える$C_{\textrm{h}}$を返す。
+
 **Get $f(v_{\parallel})$ for some of $C_{\textrm{h}}$**
 
 $C_{\textrm{h}} = 0, 0.2, 0.4, 0.6, 0.8, 1$の場合の分布関数$f(v_{\parallel})$ (1で規格化)を取得
@@ -66,5 +71,5 @@ $C_{\textrm{h}} = 0, 0.2, 0.4, 0.6, 0.8, 1$の場合の分布関数$f(v_{\parall
 - $f(v_{\parallel})$ ($C_{\textrm{h}} = 0, 0.2, 0.4, 0.6, 0.8, 1$) ("f_v_para.svg", "f_v_para.pdf")
 - $\gamma (C_{\textrm{h}})$ ("gamma.svg", "gamma.pdf")
 - $u_{\textrm{eff}} (C_{\textrm{h}})$ ("flow.svg", "flow.pdf")
-- $T_{\textrm{eff}} (C_{\textrm{h}})$ ("temp.svg", "temp.svg")
-- $q_{\parallel}^{\textrm{cond}}/q_{\parallel}^{\textrm{conv}} (C_{\textrm{h}})$ ("heatflux.svg", "heatflux.svg")
+- $T_{\textrm{eff}} (C_{\textrm{h}})$ ("temp.svg", "temp.pdf")
+- $q_{\parallel}^{\textrm{cond}}/q_{\parallel}^{\textrm{conv}} (C_{\textrm{h}})$ ("heatflux.svg", "heatflux.pdf")

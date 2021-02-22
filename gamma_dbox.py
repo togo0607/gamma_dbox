@@ -9,7 +9,8 @@ box-shape velocity distribution function f(v_para).
 """
 
 ###Specify the characteristics of f(v_para)###
-v_c = 1.0E5   #The lower limit velocity [m/s]
+q_switch = 0  #The direction of q_cond (0: q_cond > 0, 1: q_cond < 0)
+v_c = 1.0E5   #The common velocity of two boxes [m/s]
 T_1 = 20.0    #The temperature of the lower-T  component [eV]
 T_2 = 200.0   #The temperature of the higher-T component [eV]
 
@@ -18,10 +19,17 @@ m = 1.672E-27   #ion mass [kg]
 e = 1.602E-19   #elementary charge [C]
 
 ###Compute some characteristic parameters of f(v_para)###
-Delta_1 = np.sqrt(12.0*T_1*e/m)   #The width of lower-T  component [m/s]
-Delta_2 = np.sqrt(12.0*T_2*e/m)   #The width of higher-T component [m/s]
-#u_1 = v_c + Delta_1/2.0   #The flow velocity of lower-T  component [m/s]
-#u_2 = v_c + Delta_2/2.0   #The flow velocity of higher-T component [m/s]
+if(q_switch == 0):
+    Delta_1 = np.sqrt(12.0*T_1*e/m)   #The width of lower-T  component [m/s]
+    Delta_2 = np.sqrt(12.0*T_2*e/m)   #The width of higher-T component [m/s]
+elif(q_switch == 1):
+    Delta_1 = -np.sqrt(12.0*T_1*e/m)   #The width of lower-T  component [m/s]
+    Delta_2 = -np.sqrt(12.0*T_2*e/m)   #The width of higher-T component [m/s]
+
+print("Delta_1 =", Delta_1, "Delta_2 =", Delta_2)
+if((v_c + Delta_2) <= 0.0):
+    print("The distribution function has non-zero value in v_para <=0 region.")
+    exit()
 
 ###Compute the moment quantities of f(v_para)###
 c_h    = np.linspace(0.0, 1.0, 1000)   #The density ratio of higher-T component
@@ -35,21 +43,35 @@ q_cond = q_cond*(m/8.0)   #conductive heat flux / n [Wm]
 gamma  = u_eff**2.0 - v_c*(v_c+Delta_1)*(v_c+Delta_2)/(v_c+(1.0-c_h)*Delta_2+c_h*Delta_1)   #tentative
 gamma  = gamma/(T_eff*e/m)   #specific heat ratio
 
-print("at c_h =", c_h[gamma.argmin()], ", gamma =", min(gamma))
+if(q_switch == 0):
+    print("at c_h =", c_h[gamma.argmin()], ", gamma =", min(gamma))
+elif(q_switch == 1):
+    print("at c_h =", c_h[gamma.argmax()], ", gamma =", max(gamma))
 
 ###Get f(v_para) for some of c_h###
 c_h_samp = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
-v_para   = np.linspace(0.0, Delta_2+2.0*v_c, 1000)
+v_para   = np.linspace(0.0, max(v_c, v_c+Delta_2)*1.1, 1000)
 f_v_para = np.zeros((len(c_h_samp), len(v_para)))
-for iv in range(len(v_para)):
-    if(v_para[iv] >= v_c and v_para[iv] < v_c+Delta_1):
-        for ic in range(len(c_h_samp)):
-            f_v_para[ic,iv] = (1.0-c_h_samp[ic])/Delta_1+c_h_samp[ic]/Delta_2
-    elif(v_para[iv] >= v_c+Delta_1 and v_para[iv] < v_c+Delta_2):
-        for ic in range(len(c_h_samp)):
-            f_v_para[ic,iv] = c_h_samp[ic]/Delta_2
-    else:
-        f_v_para[:,iv] = 0.0
+if(q_switch == 0):
+    for iv in range(len(v_para)):
+        if(v_para[iv] >= v_c and v_para[iv] < v_c+Delta_1):
+            for ic in range(len(c_h_samp)):
+                f_v_para[ic,iv] = (1.0-c_h_samp[ic])/np.abs(Delta_1)+c_h_samp[ic]/np.abs(Delta_2)
+        elif(v_para[iv] >= v_c+Delta_1 and v_para[iv] < v_c+Delta_2):
+            for ic in range(len(c_h_samp)):
+                f_v_para[ic,iv] = c_h_samp[ic]/np.abs(Delta_2)
+        else:
+            f_v_para[:,iv] = 0.0
+elif(q_switch == 1):
+    for iv in range(len(v_para)):
+        if(v_para[iv] >= v_c+Delta_2 and v_para[iv] < v_c+Delta_1):
+            for ic in range(len(c_h_samp)):
+                f_v_para[ic,iv] = c_h_samp[ic]/np.abs(Delta_2)
+        elif(v_para[iv] >= v_c+Delta_1 and v_para[iv] < v_c):
+            for ic in range(len(c_h_samp)):
+                f_v_para[ic,iv] = (1.0-c_h_samp[ic])/np.abs(Delta_1)+c_h_samp[ic]/np.abs(Delta_2)
+        else:
+            f_v_para[:,iv] = 0.0
 
 ###Plots###
 plt.rcParams["font.size"] = 16
@@ -122,7 +144,7 @@ ax.yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
 ax.ticklabel_format(style="sci",  axis="y",scilimits=(0,0))
 ax.tick_params(which='both',axis='both', direction='in')
 ax.set(xlim=[0,1],
-       ylim=[0,(q_cond/q_conv).max()*1.1],
+       ylim=[(q_cond/q_conv).min()*1.1,(q_cond/q_conv).max()*1.1],
        xlabel='n$_{\\rm{hot}}$/n',
        ylabel='q$_{\\parallel}^{\\rm{cond}}$/q$_{\\parallel}^{\\rm{conv}}$ ',
        title='')
