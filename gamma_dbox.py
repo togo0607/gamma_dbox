@@ -78,7 +78,7 @@ plt.rcParams["font.size"] = 16
 #f(v_para)
 fig, ax = plt.subplots()
 for ic in range(len(c_h_samp)):
-    ax.plot(v_para/v_c,f_v_para[ic,:],'-',label="n/n$_{\\rm{hot}}$="+str(c_h_samp[ic]))
+    ax.plot(v_para/v_c,f_v_para[ic,:],'-',label="n$_{\\rm{hot}}$/n="+str(c_h_samp[ic]))
 ax.yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
 ax.ticklabel_format(style="sci",  axis="y",scilimits=(0,0))
 ax.tick_params(which='both',axis='both', direction='in')
